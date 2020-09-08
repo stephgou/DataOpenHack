@@ -1,0 +1,20 @@
+{
+	"name": "SRC_JSON_southridge_movies",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADLS2_DEST_team7str",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "movies",
+				"folderPath": "southridge",
+				"fileSystem": "srccontainer"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

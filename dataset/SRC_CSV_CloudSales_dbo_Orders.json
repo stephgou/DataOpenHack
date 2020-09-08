@@ -1,0 +1,25 @@
+{
+	"name": "SRC_CSV_CloudSales_dbo_Orders",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADLS2_DEST_team7str",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Orders",
+				"folderPath": "CloudSales",
+				"fileSystem": "srccontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,6 @@
+{
+	"name": "onpremWorker",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}

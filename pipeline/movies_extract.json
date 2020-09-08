@@ -1,0 +1,178 @@
+{
+	"name": "movies_extract",
+	"properties": {
+		"description": "CosmosDB Dataset connected Pipeline",
+		"activities": [
+			{
+				"name": "SRC_Movies",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "CosmosDbSqlApiSource",
+						"preferredRegions": []
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['actors']"
+								},
+								"sink": {
+									"path": "$['actors']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['availabilityDate']"
+								},
+								"sink": {
+									"path": "$['availabilityDate']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['genre']"
+								},
+								"sink": {
+									"path": "$['genre']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['rating']"
+								},
+								"sink": {
+									"path": "$['rating']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['releaseYear']"
+								},
+								"sink": {
+									"path": "$['releaseYear']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['runtime']"
+								},
+								"sink": {
+									"path": "$['runtime']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['streamingAvailabilityDate']"
+								},
+								"sink": {
+									"path": "$['streamingAvailabilityDate']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['tier']"
+								},
+								"sink": {
+									"path": "$['tier']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['title']"
+								},
+								"sink": {
+									"path": "$['title']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['id']"
+								},
+								"sink": {
+									"path": "$['id']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['_rid']"
+								},
+								"sink": {
+									"path": "$['_rid']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['_self']"
+								},
+								"sink": {
+									"path": "$['_self']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['_etag']"
+								},
+								"sink": {
+									"path": "$['_etag']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['_attachments']"
+								},
+								"sink": {
+									"path": "$['_attachments']"
+								}
+							},
+							{
+								"source": {
+									"path": "$['_ts']"
+								},
+								"sink": {
+									"path": "$['_ts']"
+								}
+							}
+						],
+						"collectionReference": ""
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Southridge_movies",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "SRC_JSON_southridge_movies",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-09-08T10:12:35Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

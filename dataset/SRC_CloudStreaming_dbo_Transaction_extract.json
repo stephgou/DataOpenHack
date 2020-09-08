@@ -1,0 +1,25 @@
+{
+	"name": "SRC_CloudStreaming_dbo_Transaction_extract",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADLS2_DEST_team7str",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Transaction",
+				"folderPath": "CloudStreaming",
+				"fileSystem": "srccontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
