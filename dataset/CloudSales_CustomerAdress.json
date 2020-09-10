@@ -1,0 +1,24 @@
+{
+	"name": "CloudSales_CustomerAdress",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADLS2_DEST_team7str",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Cloudsales",
+				"fileSystem": "stg-container"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

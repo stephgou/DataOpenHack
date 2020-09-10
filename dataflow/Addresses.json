@@ -1,0 +1,45 @@
+{
+	"name": "Addresses",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SRC_CloudStreaming_dbo_Adresses_extract",
+						"type": "DatasetReference"
+					},
+					"name": "CloudstreamingAddress"
+				},
+				{
+					"dataset": {
+						"referenceName": "SRC_CSV_CloudSales_dbo_Addresses",
+						"type": "DatasetReference"
+					},
+					"name": "CludSalesAddress"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Addresses",
+						"type": "DatasetReference"
+					},
+					"name": "SynapseAddresses"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Select3"
+				},
+				{
+					"name": "Select4"
+				},
+				{
+					"name": "CombineAddresses"
+				}
+			],
+			"script": "source(output(\n\t\tAddressID as string,\n\t\tCustomerID as string,\n\t\tAddressLine1 as string,\n\t\tAddressLine2 as string,\n\t\tCity as string,\n\t\tState as string,\n\t\tZipCode as string,\n\t\tCreatedDate as string,\n\t\tUpdatedDate as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false,\n\trowUrlColumn: 'sourcename') ~> CloudstreamingAddress\nsource(output(\n\t\tAddressID as string,\n\t\tCustomerID as string,\n\t\tAddressLine1 as string,\n\t\tAddressLine2 as string,\n\t\tCity as string,\n\t\tState as string,\n\t\tZipCode as string,\n\t\tCreatedDate as string,\n\t\tUpdatedDate as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false,\n\trowUrlColumn: 'sourcename') ~> CludSalesAddress\nCloudstreamingAddress select(mapColumn(\n\t\tAddressID,\n\t\tCustomerID,\n\t\tAddressLine1,\n\t\tAddressLine2,\n\t\tCity,\n\t\tState,\n\t\tZipCode,\n\t\tCreatedDate,\n\t\tUpdatedDate,\n\t\tsourcename\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select3\nCludSalesAddress select(mapColumn(\n\t\tAddressID,\n\t\tCustomerID,\n\t\tAddressLine1,\n\t\tAddressLine2,\n\t\tCity,\n\t\tState,\n\t\tZipCode,\n\t\tCreatedDate,\n\t\tUpdatedDate,\n\t\tsourcename\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select4\nSelect3, Select4 union(byName: true)~> CombineAddresses\nCombineAddresses sink(input(\n\t\tCustomerID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['Addresses.parquet'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SynapseAddresses"
+		}
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"name": "OrderDetails",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "team7synapsestorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "test"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

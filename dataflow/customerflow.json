@@ -1,0 +1,45 @@
+{
+	"name": "customerflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SRC_CloudStreaming_dbo_Customers_extract",
+						"type": "DatasetReference"
+					},
+					"name": "CloudstreamingCusromerSrc"
+				},
+				{
+					"dataset": {
+						"referenceName": "SRC_CSV_CloudSales_dbo_Customers",
+						"type": "DatasetReference"
+					},
+					"name": "CloudSalesCustomer"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Customers",
+						"type": "DatasetReference"
+					},
+					"name": "ConsolidatedCustomers"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Select1"
+				},
+				{
+					"name": "Select2"
+				},
+				{
+					"name": "Union1"
+				}
+			],
+			"script": "source(output(\n\t\tCustomerID as string,\n\t\tLastName as string,\n\t\tFirstName as string,\n\t\tPhoneNumber as string,\n\t\tCreatedDate as string,\n\t\tUpdatedDate as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false,\n\trowUrlColumn: 'sourcesystem') ~> CloudstreamingCusromerSrc\nsource(output(\n\t\tCustomerID as string,\n\t\tLastName as string,\n\t\tFirstName as string,\n\t\tPhoneNumber as string,\n\t\tCreatedDate as string,\n\t\tUpdatedDate as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false,\n\trowUrlColumn: 'sourcesystem') ~> CloudSalesCustomer\nCloudstreamingCusromerSrc select(mapColumn(\n\t\tsourcesystem,\n\t\tCustomerID,\n\t\tLastName,\n\t\tFirstName,\n\t\tPhoneNumber,\n\t\tCreatedDate,\n\t\tUpdatedDate\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nCloudSalesCustomer select(mapColumn(\n\t\tsourcesystem,\n\t\tCustomerID,\n\t\tLastName,\n\t\tFirstName,\n\t\tPhoneNumber,\n\t\tCreatedDate,\n\t\tUpdatedDate\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nSelect1, Select2 union(byName: true)~> Union1\nUnion1 sink(input(\n\t\tsourcesystem as string,\n\t\tCustomerID as string,\n\t\tLastName as string,\n\t\tFirstName as string,\n\t\tPhoneNumber as string,\n\t\tCreatedDate as string,\n\t\tUpdatedDate as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['Customers.parquet'],\n\tmapColumn(\n\t\tsourcesystem,\n\t\tCustomerID,\n\t\tLastName,\n\t\tFirstName,\n\t\tPhoneNumber,\n\t\tCreatedDate,\n\t\tUpdatedDate\n\t),\n\tpartitionBy('hash', 1)) ~> ConsolidatedCustomers"
+		}
+	}
+}

@@ -1,5 +1,5 @@
 {
-	"name": "SRC_CSV_CloudSales_dbo_Customers",
+	"name": "SRC_VanArsdel_Customer",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ADLS2_DEST_team7str",
@@ -10,8 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Customers",
-				"folderPath": "CloudSales",
+				"fileName": "Customers.txt",
+				"folderPath": "VanArsdel",
 				"fileSystem": "srccontainer"
 			},
 			"columnDelimiter": ",",
@@ -30,6 +30,26 @@
 			},
 			{
 				"name": "FirstName",
+				"type": "String"
+			},
+			{
+				"name": "AddressLine1",
+				"type": "String"
+			},
+			{
+				"name": "AddressLine2",
+				"type": "String"
+			},
+			{
+				"name": "City",
+				"type": "String"
+			},
+			{
+				"name": "State",
+				"type": "String"
+			},
+			{
+				"name": "ZipCode",
 				"type": "String"
 			},
 			{

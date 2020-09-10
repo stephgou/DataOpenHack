@@ -1,0 +1,20 @@
+{
+	"name": "unifiedAddresses",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADLS2_DEST_team7str",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "stg-container"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

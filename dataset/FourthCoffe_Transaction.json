@@ -1,5 +1,5 @@
 {
-	"name": "SRC_CSV_CloudSales_dbo_Customers",
+	"name": "FourthCoffe_Transaction",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ADLS2_DEST_team7str",
@@ -10,8 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Customers",
-				"folderPath": "CloudSales",
+				"fileName": "2018-01-01.csv",
+				"folderPath": "FourthCoffee",
 				"fileSystem": "srccontainer"
 			},
 			"columnDelimiter": ",",
@@ -21,19 +21,35 @@
 		},
 		"schema": [
 			{
+				"name": "TransactionID",
+				"type": "String"
+			},
+			{
 				"name": "CustomerID",
 				"type": "String"
 			},
 			{
-				"name": "LastName",
+				"name": "MovieID",
 				"type": "String"
 			},
 			{
-				"name": "FirstName",
+				"name": "RentalDate",
 				"type": "String"
 			},
 			{
-				"name": "PhoneNumber",
+				"name": "ReturnDate",
+				"type": "String"
+			},
+			{
+				"name": "RentalCost",
+				"type": "String"
+			},
+			{
+				"name": "LateFee",
+				"type": "String"
+			},
+			{
+				"name": "RewindFlag",
 				"type": "String"
 			},
 			{

@@ -1,48 +1,47 @@
 {
-	"name": "SRC_CSV_CloudSales_dbo_Customers",
+	"name": "Customers",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ADLS2_DEST_team7str",
+			"referenceName": "team7synapsestorage",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
-		"type": "DelimitedText",
+		"type": "Parquet",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Customers",
-				"folderPath": "CloudSales",
-				"fileSystem": "srccontainer"
+				"fileSystem": "test"
 			},
-			"columnDelimiter": ",",
-			"escapeChar": "\\",
-			"firstRowAsHeader": true,
-			"quoteChar": "\""
+			"compressionCodec": "snappy"
 		},
 		"schema": [
 			{
+				"name": "sourcesystem",
+				"type": "UTF8"
+			},
+			{
 				"name": "CustomerID",
-				"type": "String"
+				"type": "UTF8"
 			},
 			{
 				"name": "LastName",
-				"type": "String"
+				"type": "UTF8"
 			},
 			{
 				"name": "FirstName",
-				"type": "String"
+				"type": "UTF8"
 			},
 			{
 				"name": "PhoneNumber",
-				"type": "String"
+				"type": "UTF8"
 			},
 			{
 				"name": "CreatedDate",
-				"type": "String"
+				"type": "UTF8"
 			},
 			{
 				"name": "UpdatedDate",
-				"type": "String"
+				"type": "UTF8"
 			}
 		]
 	},

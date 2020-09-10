@@ -1,0 +1,51 @@
+{
+	"name": "Orders_OrderDetails",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SRC_CSV_CloudSales_dbo_Orders",
+						"type": "DatasetReference"
+					},
+					"name": "Orders"
+				},
+				{
+					"dataset": {
+						"referenceName": "SRC_CSV_CloudSales_dbo_OrderDetails",
+						"type": "DatasetReference"
+					},
+					"name": "OrderDetails"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "OrderDetails",
+						"type": "DatasetReference"
+					},
+					"name": "Team7Synapse"
+				}
+			],
+			"transformations": [
+				{
+					"name": "RenameOrderDates"
+				},
+				{
+					"name": "RenameOrderDetailDates"
+				},
+				{
+					"name": "Join1"
+				},
+				{
+					"name": "AddSourceID"
+				},
+				{
+					"name": "FinalOutput"
+				}
+			],
+			"script": "source(output(\n\t\tOrderID as string,\n\t\tCustomerID as string,\n\t\tOrderDate as date,\n\t\tShipDate as date,\n\t\tTotalCost as double,\n\t\tCreatedDate as date,\n\t\tUpdatedDate as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> Orders\nsource(output(\n\t\tOrderDetailID as string,\n\t\tOrderID as string,\n\t\tMovieID as string,\n\t\tQuantity as short,\n\t\tUnitCost as double,\n\t\tLineNumber as short,\n\t\tCreatedDate as date,\n\t\tUpdatedDate as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> OrderDetails\nOrders select(mapColumn(\n\t\tOrderID,\n\t\tCustomerID,\n\t\tOrderDate,\n\t\tShipDate,\n\t\tTotalCost,\n\t\tOrdersCreatedDate = CreatedDate,\n\t\tOrdersUpdatedDate = UpdatedDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> RenameOrderDates\nOrderDetails select(mapColumn(\n\t\tOrderDetailID,\n\t\tOrderID,\n\t\tMovieID,\n\t\tQuantity,\n\t\tUnitCost,\n\t\tLineNumber,\n\t\tOrderDetailsCreatedDate = CreatedDate,\n\t\tOrderDetailsUpdatedDate = UpdatedDate\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RenameOrderDetailDates\nRenameOrderDates, RenameOrderDetailDates join(RenameOrderDates@OrderID == RenameOrderDetailDates@OrderID,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> Join1\nJoin1 derive(SourceID = toString(\"CloudSales\")) ~> AddSourceID\nAddSourceID select(mapColumn(\n\t\tOrderID = {RenameOrderDates@OrderID},\n\t\tCustomerID,\n\t\tOrderDate,\n\t\tShipDate,\n\t\tTotalCost,\n\t\tOrdersCreatedDate,\n\t\tOrdersUpdatedDate,\n\t\tOrderDetailID,\n\t\tMovieID,\n\t\tQuantity,\n\t\tUnitCost,\n\t\tLineNumber,\n\t\tOrderDetailsCreatedDate,\n\t\tOrderDetailsUpdatedDate,\n\t\tSourceID\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> FinalOutput\nFinalOutput sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['OrderDetails.parquet'],\n\tmapColumn(\n\t\tOrderID,\n\t\tCustomerID,\n\t\tOrderDate,\n\t\tShipDate,\n\t\tTotalCost,\n\t\tOrdersCreatedDate,\n\t\tOrdersUpdatedDate,\n\t\tOrderDetailID,\n\t\tMovieID,\n\t\tQuantity,\n\t\tUnitCost,\n\t\tLineNumber,\n\t\tOrderDetailsCreatedDate,\n\t\tOrderDetailsUpdatedDate,\n\t\tSourceID\n\t),\n\tpartitionBy('hash', 1)) ~> Team7Synapse"
+		}
+	}
+}
